@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { verifySession } from '@/lib/sessions'
 import Navbar from '@/components/shared/Navbar'
+import Footer from "@/components/shared/Footer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -21,18 +22,22 @@ export const metadata: Metadata = {
 
 export default async function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
-
+}) {
   const userId = await verifySession()
   const isLoggedIn = !!userId
 
   return (
     <html lang="en">
-      <body className="min-h-screen bg-white font-sans text-black" >
+      <body className="min-h-screen flex flex-col bg-white font-sans text-black">
         <Navbar isLoggedIn={isLoggedIn} />
-        {children}
+
+        <main className="flex-1 flex">
+          {children}
+        </main>
+
+        <Footer />
       </body>
     </html>
   );

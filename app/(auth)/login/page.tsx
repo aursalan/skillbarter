@@ -21,7 +21,7 @@ export default function LoginPage() {
     const [state, formAction] = useFormState(login, { message: '' })
 
     return (
-        <div className="flex min-h-screen items-center justify-center bg-white px-6">
+        <div className="flex flex-1 items-center justify-center bg-white px-6">
 
             <div className="w-full max-w-105 rounded-xl border border-black/5 bg-white p-8 shadow-[0_1px_2px_rgba(0,0,0,0.04)]">
 
