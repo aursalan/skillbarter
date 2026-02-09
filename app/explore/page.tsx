@@ -54,13 +54,16 @@ export default function ExplorePage() {
     })
   }, [trades, currentUserId, query])
 
-  if (loading) {
-    return (
-      <div className="py-20 text-center text-sm text-black/40 animate-pulse">
-        Loading exchanges…
+if (loading) {
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-white">
+      <div className="flex flex-col items-center gap-3 text-black/50">
+        <div className="h-6 w-6 animate-spin rounded-full border-2 border-black/20 border-t-black" />
+        <p className="text-sm">Loading exchanges…</p>
       </div>
-    )
-  }
+    </div>
+  )
+}
 
   return (
     <div className="mx-auto flex max-w-3xl flex-col px-4 py-14 sm:px-6 lg:max-w-5xl">
