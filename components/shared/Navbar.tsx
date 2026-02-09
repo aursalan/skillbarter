@@ -20,13 +20,6 @@ export default function Navbar({ isLoggedIn }: { isLoggedIn: boolean }) {
                 </Link>
 
                 <div className="hidden md:flex items-center gap-8">
-                    <Link
-                        href="#feed"
-                        className="text-sm text-black/60 hover:text-black transition"
-                    >
-                        Browse
-                    </Link>
-
                     {isLoggedIn ? (
                         <>
                             <form action={logout}>
