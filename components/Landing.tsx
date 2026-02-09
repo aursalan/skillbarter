@@ -4,7 +4,7 @@ import { getTrades } from '@/app/actions'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 
-export default function LandingPage() {
+export default function Landing() {
   const [trades, setTrades] = useState<any[]>([])
 
   useEffect(() => {
