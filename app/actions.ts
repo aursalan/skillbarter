@@ -32,7 +32,7 @@ export async function signup(prevState: any, formData: FormData) {
       `INSERT INTO users (name, email, password) VALUES ($1, $2, $3) RETURNING id`,
       [name, email, hashedPassword]
     );
-    
+
     await createSession(result.rows[0].id.toString());
   } catch (error) {
     return { message: "Email already exists" };
@@ -75,13 +75,10 @@ export async function getTrades() {
   const result = await query(`
     SELECT 
       t.*, 
-      u.name as offerer_name, 
-      u.email as offerer_email,
-      r.name as responder_name,
-      r.email as responder_email
+      u.name as user_name, 
+      u.email as user_email
     FROM trades t
-    JOIN users u ON t.offerer_id = u.id
-    LEFT JOIN users r ON t.responder_id = r.id
+    JOIN users u ON t.user_id = u.id
     ORDER BY t.created_at DESC
   `);
   return result.rows;
@@ -89,7 +86,7 @@ export async function getTrades() {
 
 export async function createTrade(prevState: any, formData: FormData) {
   const userId = await getCurrentUser();
-  
+
   if (!userId) {
     return { message: "You must be logged in to post." };
   }
@@ -108,7 +105,7 @@ export async function createTrade(prevState: any, formData: FormData) {
 
   try {
     await query(
-      `INSERT INTO trades (offerer_id, skill_offered, skill_wanted, description) 
+      `INSERT INTO trades (user_id, skill_offered, skill_wanted, description) 
        VALUES ($1, $2, $3, $4)`,
       [userId, skill_offered, skill_wanted, description]
     );
@@ -121,23 +118,40 @@ export async function createTrade(prevState: any, formData: FormData) {
   redirect('/');
 }
 
-export async function acceptTrade(tradeId: number) {
+export async function updateTrade(tradeId: number, formData: FormData) {
   const userId = await getCurrentUser();
-  if (!userId) return { message: "Login required" };
+  if (!userId) return { message: "Unauthorized" };
+
+  const skill_offered = formData.get('skill_offered') as string;
+  const skill_wanted = formData.get('skill_wanted') as string;
+  const description = formData.get('description') as string;
 
   try {
-    const result = await query(
+    await query(
       `UPDATE trades 
-       SET status = 'ACCEPTED', responder_id = $1 
-       WHERE id = $2 AND status = 'OPEN'`,
-      [userId, tradeId]
+       SET skill_offered = $1, skill_wanted = $2, description = $3, updated_at = NOW()
+       WHERE id = $4 AND user_id = $5`,
+      [skill_offered, skill_wanted, description, tradeId, userId]
     );
-
-    if (result.rowCount === 0) {
-      return { message: "Too late! Someone else just accepted this trade." };
-    }
   } catch (error) {
-    return { message: "Database error." };
+    return { message: "Failed to update" };
+  }
+
+  revalidatePath('/');
+  return { message: "Updated successfully" };
+}
+
+export async function toggleTradeStatus(tradeId: number, newStatus: 'OPEN' | 'CLOSED') {
+  const userId = await getCurrentUser();
+  if (!userId) return { message: "Unauthorized" };
+
+  try {
+    await query(
+      `UPDATE trades SET status = $1 WHERE id = $2 AND user_id = $3`,
+      [newStatus, tradeId, userId]
+    );
+  } catch (error) {
+    return { message: "Failed to update status" };
   }
 
   revalidatePath('/');
@@ -149,7 +163,7 @@ export async function deleteTrade(tradeId: number) {
 
   try {
     await query(
-      `DELETE FROM trades WHERE id = $1 AND offerer_id = $2`,
+      `DELETE FROM trades WHERE id = $1 AND user_id = $2`,
       [tradeId, userId]
     );
   } catch (error) {
