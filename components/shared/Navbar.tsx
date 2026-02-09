@@ -22,10 +22,24 @@ export default function Navbar({ isLoggedIn }: { isLoggedIn: boolean }) {
                 <div className="hidden md:flex items-center gap-8">
                     {isLoggedIn ? (
                         <>
+                            <Link
+                                href="/explore"
+                                className="text-sm text-black/60 hover:text-black transition"
+                            >
+                                Explore
+                            </Link>
+
+                            <Link
+                                href="/mytrades"
+                                className="text-sm text-black/60 hover:text-black transition"
+                            >
+                                My Trades
+                            </Link>
+
                             <form action={logout}>
                                 <button
                                     type="submit"
-                                    className="text-sm text-black/60 hover:text-black transition"
+                                    className="text-sm text-black/60 hover:text-red-600 transition"
                                 >
                                     Log out
                                 </button>
@@ -76,16 +90,31 @@ export default function Navbar({ isLoggedIn }: { isLoggedIn: boolean }) {
                         {isLoggedIn ? (
                             <>
                                 <Link
+                                    href="/explore"
+                                    className="block text-sm font-medium text-black"
+                                >
+                                    Explore
+                                </Link>
+
+                                <Link
+                                    href="/mytrades"
+                                    className="block text-sm font-medium text-black"
+                                >
+                                    My Trades
+                                </Link>
+
+                                <Link
                                     href="/create"
                                     className="block text-sm font-medium text-black"
                                     onClick={() => setIsOpen(false)}
                                 >
                                     Post trade
                                 </Link>
+
                                 <form action={logout}>
                                     <button
                                         type="submit"
-                                        className="block text-sm text-black/60"
+                                        className="block text-sm text-red-600"
                                     >
                                         Log out
                                     </button>
