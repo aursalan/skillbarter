@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { logout } from '@/app/actions'
 import { Menu, X } from 'lucide-react'
 
@@ -12,10 +13,20 @@ export default function Navbar({ isLoggedIn }: { isLoggedIn: boolean }) {
         <nav className="sticky top-0 z-50 w-full border-b border-black/5 bg-white/70 backdrop-blur-xl">
             <div className="mx-auto max-w-5xl px-6 h-17 flex items-center justify-between">
 
-                <Link href="/" className="group">
+                <Link href="/" className="flex items-center gap-3 group">
+
+                    <div className="relative h-5 w-5 overflow-hidden">
+                        <Image
+                            src="/logo.png"
+                            alt="SkillBarter Logo"
+                            fill
+                            className="object-cover"
+                        />
+                    </div>
+
                     <span className="text-[17px] font-medium tracking-tight text-black transition-opacity duration-200 group-hover:opacity-80">
                         Skill
-                        <span className="font-semibold ml-px">Barter</span>
+                        <span className="font-semibold ml-px"> Barter</span>
                     </span>
                 </Link>
 
