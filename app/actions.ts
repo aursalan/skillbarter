@@ -15,7 +15,7 @@ const TradeSchema = z.object({
 
 export async function getCurrentUser() {
   const userId = await verifySession();
-  return userId ? parseInt(userId) : null;
+  return userId;
 }
 
 export async function signup(prevState: any, formData: FormData) {
@@ -118,7 +118,7 @@ export async function createTrade(prevState: any, formData: FormData) {
   redirect('/');
 }
 
-export async function updateTrade(tradeId: number, formData: FormData) {
+export async function updateTrade(tradeId: string, formData: FormData) {
   const userId = await getCurrentUser();
   if (!userId) return { message: "Unauthorized" };
 
@@ -141,7 +141,7 @@ export async function updateTrade(tradeId: number, formData: FormData) {
   return { message: "Updated successfully" };
 }
 
-export async function toggleTradeStatus(tradeId: number, newStatus: 'OPEN' | 'CLOSED') {
+export async function toggleTradeStatus(tradeId: string, newStatus: 'OPEN' | 'CLOSED') {
   const userId = await getCurrentUser();
   if (!userId) return { message: "Unauthorized" };
 
@@ -157,7 +157,7 @@ export async function toggleTradeStatus(tradeId: number, newStatus: 'OPEN' | 'CL
   revalidatePath('/');
 }
 
-export async function deleteTrade(tradeId: number) {
+export async function deleteTrade(tradeId: string) {
   const userId = await getCurrentUser();
   if (!userId) return { message: "Not authorized" };
 

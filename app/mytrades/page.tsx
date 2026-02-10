@@ -10,8 +10,8 @@ import { useEffect, useMemo, useState, useTransition } from 'react'
 import Link from 'next/link'
 
 interface Trade {
-    id: number
-    user_id: number
+    id: string
+    user_id: string
     skill_offered: string
     skill_wanted: string
     description: string
@@ -19,7 +19,7 @@ interface Trade {
 }
 
 export default function MyTradesPage() {
-    const [currentUserId, setCurrentUserId] = useState<number | null>(null)
+    const [currentUserId, setCurrentUserId] = useState<string | null>(null)
     const [trades, setTrades] = useState<Trade[]>([])
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState<string | null>(null)
@@ -58,7 +58,7 @@ export default function MyTradesPage() {
         return trades.filter((t) => t.user_id === currentUserId)
     }, [trades, currentUserId])
 
-    function handleToggleStatus(tradeId: number, current: Trade['status']) {
+    function handleToggleStatus(tradeId: string, current: Trade['status']) {
         const newStatus: Trade['status'] =
             current === 'OPEN' ? 'CLOSED' : 'OPEN'
 
@@ -82,7 +82,7 @@ export default function MyTradesPage() {
         })
     }
 
-    function handleDelete(tradeId: number) {
+    function handleDelete(tradeId: string) {
         const confirmed = confirm('Delete this trade permanently?')
         if (!confirmed) return
 

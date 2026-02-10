@@ -4,8 +4,8 @@ import { getTrades, getCurrentUser } from '@/app/actions'
 import { useEffect, useMemo, useState } from 'react'
 
 interface Trade {
-  id: number
-  user_id: number
+  id: string
+  user_id: string
   user_name: string
   user_email: string
   skill_offered: string
@@ -15,7 +15,7 @@ interface Trade {
 }
 
 export default function ExplorePage() {
-  const [currentUserId, setCurrentUserId] = useState<number | null>(null)
+  const [currentUserId, setCurrentUserId] = useState<string | null>(null)
   const [trades, setTrades] = useState<Trade[]>([])
   const [query, setQuery] = useState('')
   const [loading, setLoading] = useState(true)
@@ -34,12 +34,11 @@ export default function ExplorePage() {
   }, [])
 
   const exploreTrades = useMemo(() => {
-    if (currentUserId === null) return []
 
     const q = query.toLowerCase().trim()
 
     return trades.filter((trade) => {
-      if (trade.user_id === currentUserId) return false
+      if (currentUserId && trade.user_id === currentUserId) return false;
 
       if (trade.status !== 'OPEN') return false
 

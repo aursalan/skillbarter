@@ -13,7 +13,7 @@ interface TradeForm {
 export default function EditTradePage() {
     const { id } = useParams()
     const router = useRouter()
-    const tradeId = Number(id)
+    const tradeId = id as string
 
     const [form, setForm] = useState<TradeForm>({
         skill_offered: '',
@@ -26,7 +26,7 @@ export default function EditTradePage() {
     const [isPending, startTransition] = useTransition()
 
     useEffect(() => {
-        if (!tradeId || Number.isNaN(tradeId)) {
+        if (!tradeId) {
             setError('Invalid trade ID')
             setLoading(false)
             return
